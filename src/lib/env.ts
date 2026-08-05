@@ -1,18 +1,23 @@
 import type { NavItem } from '../types.js'
 
-type Env = Record<string, string | undefined>
+type Env = Record<string, unknown>
 
 export const DEFAULT_TELEGRAM_HOST = 'telegram.me'
 
 function getProcessEnv(name: string): string | undefined {
-  return (Reflect.get(globalThis, 'process') as { env?: Env } | undefined)?.env?.[name]
+  return (Reflect.get(globalThis, 'process') as { env?: Record<string, string | undefined> } | undefined)?.env?.[name]
 }
 
 /**
  * Runtime envs must win over Vite's build-time import.meta.env values.
  */
 export function getEnv(env: Env | undefined, name: string): string | undefined {
-  return getProcessEnv(name) ?? env?.[name]
+  const value = getProcessEnv(name) ?? env?.[name]
+  if (typeof value === 'string')
+    return value
+  if (typeof value === 'number' || typeof value === 'boolean')
+    return String(value)
+  return undefined
 }
 
 export function getStaticProxy(env: Env): string {
