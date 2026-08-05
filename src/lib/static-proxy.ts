@@ -28,7 +28,7 @@ export function isStaticProxyWhitelisted(target: URL): boolean {
   const isAllowedProtocol = target.protocol === 'http:' || target.protocol === 'https:'
   const targetWhitelist = [
     ...DEFAULT_TARGET_WHITELIST,
-    ...getTargetWhitelist(import.meta.env),
+    ...getTargetWhitelist(import.meta.env as any),
   ]
   return isAllowedProtocol && targetWhitelist.some(domain => target.hostname === domain || target.hostname.endsWith(`.${domain}`))
 }

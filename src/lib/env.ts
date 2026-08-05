@@ -1,6 +1,6 @@
 import type { NavItem } from '../types.js'
 
-type Env = Record<string, unknown>
+type Env = any
 
 export const DEFAULT_TELEGRAM_HOST = 'telegram.me'
 
